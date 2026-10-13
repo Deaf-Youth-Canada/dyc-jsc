@@ -89,3 +89,18 @@ nav a[aria-current="page"]{color:var(--red);text-decoration:underline;text-under
 .connection-list .connection-url{order:3;padding-top:8px;margin-top:auto;font-weight:700}
 .resource-region>summary:focus-visible{outline:3px solid #2472d6;outline-offset:-3px}
 @media(max-width:760px){.connections-directory{margin-top:18px}.connection-list{grid-template-columns:1fr;padding:14px}.resource-region>summary{padding:17px 16px}.region-title{font-size:1.08rem}.resource-count{margin-left:auto}.connection-list a,.connection-list .is-unlinked{min-height:70px}}
+
+/* Public Google Calendar events */
+.calendar-day{position:relative}
+.calendar-day.has-events::after{content:"";position:absolute;bottom:1px;left:calc(50% - 2px);width:4px;height:4px;border-radius:50%;background:var(--red)}
+.calendar-timezone{font-size:.8rem;color:var(--muted);margin:8px 0 0}
+.calendar-event{padding:16px 0;border-bottom:1px solid #dce0e8;overflow-wrap:anywhere}
+.calendar-event:last-child{border-bottom:0;padding-bottom:0}
+.calendar-event h4,.calendar-event h5{font-size:1rem;margin:0 0 7px;line-height:1.4;text-transform:none}
+.calendar-event p{font-size:.9rem;margin:6px 0;color:var(--muted)}
+.calendar-event .event-time{color:var(--navy);font-weight:600}
+.calendar-event .event-description{white-space:pre-wrap;max-height:18rem;overflow:auto}
+.event-details{margin-top:10px;padding:6px 0;border:0;background:none;font:inherit;font-size:.9rem;font-weight:600;color:var(--red);text-decoration:underline;cursor:pointer}
+.calendar-live{margin-top:24px}
+#calendar-sync-status{font-size:.9rem;padding:12px;border-left:3px solid var(--red);background:white}
+.calendar-day:focus-visible,.event-details:focus-visible{outline:3px solid var(--navy);outline-offset:3px}

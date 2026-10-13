@@ -39,7 +39,7 @@ function renderCalendar(){
  const message=document.createElement('p');message.textContent=lang==='fr'?'Aucun événement n’est annoncé pour cette date.':'No events have been announced for this date.';
  selection.append(title,message);
 }
-function moveMonth(amount){const d=new Date(calendarYear,calendarMonth+amount,1);calendarYear=d.getFullYear();calendarMonth=d.getMonth();renderCalendar()}
+function moveMonth(amount){const d=new Date(calendarYear,calendarMonth+amount,1);calendarYear=d.getFullYear();calendarMonth=d.getMonth();selectedCalendarDate=new Date(calendarYear,calendarMonth,1);renderCalendar()}
 document.querySelector('#previous-month')?.addEventListener('click',()=>moveMonth(-1));document.querySelector('#next-month')?.addEventListener('click',()=>moveMonth(1));document.querySelector('#today-month')?.addEventListener('click',()=>{const today=new Date();calendarYear=today.getFullYear();calendarMonth=today.getMonth();selectedCalendarDate=new Date(calendarYear,calendarMonth,today.getDate());renderCalendar()});
 document.querySelector('#calendar-days')?.addEventListener('click',event=>{const button=event.target.closest('button[data-day]');if(!button)return;const day=Number(button.dataset.day);selectedCalendarDate=new Date(calendarYear,calendarMonth,day);renderCalendar();document.querySelector('#calendar-days button[data-day="'+day+'"]').focus({preventScroll:true});});
 setLanguage(lang);
