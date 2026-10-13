@@ -15,10 +15,10 @@ class CalendarTests(unittest.TestCase):
         self.assertEqual(len(data), 1)
         self.assertEqual((data[0]['startDay'], data[0]['endDay']), ('2026-10-10', '2026-10-12'))
     def test_recurrence_exclusion_override_and_dst(self):
-        raw = event('weekly', 'DTSTART;TZID=America/Edmonton:20261025T120000\r\nDTEND;TZID=America/Edmonton:20261025T130000\r\nRRULE:FREQ=WEEKLY;COUNT=4\r\nEXDATE;TZID=America/Edmonton:20261108T120000\r\nSUMMARY:Meetup')
-        raw += event('weekly', 'RECURRENCE-ID;TZID=America/Edmonton:20261115T120000\r\nDTSTART;TZID=America/Edmonton:20261116T150000\r\nDTEND;TZID=America/Edmonton:20261116T160000\r\nSUMMARY:Moved meetup')
-        data = build_feed(feed(raw), NOW)['events']
-        self.assertEqual([x['startDay'] for x in data], ['2026-10-25', '2026-11-01', '2026-11-16'])
+        raw = event('weekly', 'DTSTART;TZID=America/Edmonton:20241027T120000\r\nDTEND;TZID=America/Edmonton:20241027T130000\r\nRRULE:FREQ=WEEKLY;COUNT=4\r\nEXDATE;TZID=America/Edmonton:20241110T120000\r\nSUMMARY:Meetup')
+        raw += event('weekly', 'RECURRENCE-ID;TZID=America/Edmonton:20241117T120000\r\nDTSTART;TZID=America/Edmonton:20241118T150000\r\nDTEND;TZID=America/Edmonton:20241118T160000\r\nSUMMARY:Moved meetup')
+        data = build_feed(feed(raw), datetime(2024, 10, 1, tzinfo=timezone.utc))['events']
+        self.assertEqual([x['startDay'] for x in data], ['2024-10-27', '2024-11-03', '2024-11-18'])
         self.assertTrue(data[0]['start'].endswith('-06:00'))
         self.assertTrue(data[1]['start'].endswith('-07:00'))
         self.assertEqual(data[2]['title'], 'Moved meetup')
