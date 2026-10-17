@@ -1,9 +1,9 @@
 {
   "version": 1,
   "timeZone": "America/Edmonton",
-  "windowStart": "2025-10-15",
-  "windowEnd": "2028-10-16",
-  "checkedAt": "2026-10-16T09:03:59.755246+00:00",
+  "windowStart": "2025-10-16",
+  "windowEnd": "2028-10-17",
+  "checkedAt": "2026-10-17T09:43:07.276747+00:00",
   "events": [
     {
       "title": "test",
