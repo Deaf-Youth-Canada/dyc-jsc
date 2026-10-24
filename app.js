@@ -65,7 +65,7 @@ document.querySelector('#bylaw-zoom')?.addEventListener('change',e=>{document.qu
 
 
 // Keep the contact confirmation on the current GitHub Pages or custom-domain site.
-const contactForm = document.querySelector('form[action="https://formsubmit.co/dycjsc@gmail.com"]');
+const contactForm = document.querySelector('form[action="https://formsubmit.co/info@dycjsc.ca"]');
 if (contactForm && /^https?:$/.test(window.location.protocol)) {
   const nextPage = document.createElement('input');
   nextPage.type = 'hidden';
@@ -73,3 +73,4 @@ if (contactForm && /^https?:$/.test(window.location.protocol)) {
   nextPage.value = new URL('contact-thanks.html', window.location.href).href;
   contactForm.appendChild(nextPage);
 }
+

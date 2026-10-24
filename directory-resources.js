@@ -25,7 +25,7 @@
       { name: 'Canada Video Relay Service', url: 'https://srvcanadavrs.ca/en/', category: 'Video relay access', contact: '911 and 988 calls available 24/7 via VRS' },
       { name: 'Deaf Canada Travel', url: 'https://www.deafcanadacruiseresort.com/', category: 'Accessible travel', contact: 'oluehr@deafcanadatravel.ca · dunderschultz@deafcanadatravel.ca' },
       { name: 'Canada Deaf Travel', url: 'https://canadadeaftravel.com/', category: 'Accessible travel', contact: 'mjjanes24@canadadeaftravel.com · kelly@canadadeaftravel.com · suzy@canadadeaftravel.com' },
-      { name: 'Deaf Youth Canada', url: 'https://dycjsc.wixsite.com/home', category: 'Youth resource', contact: 'dycjsc@gmail.com' },
+      { name: 'Deaf Youth Canada', url: 'https://dycjsc.ca', category: 'Youth resource', contact: 'info@dycjsc.ca' },
       { name: 'Deaf Youth Hub', url: 'https://deafyouthhub.ca/', category: 'Youth resource', contact: 'deafyouthhub.ca' },
       { name: 'Jade’s Camp', url: 'https://www.jadescamp.com/', category: 'Youth resource', contact: 'jadescampdhh@gmail.com' }
     ],
@@ -268,3 +268,4 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
+
