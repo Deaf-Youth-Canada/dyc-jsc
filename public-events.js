@@ -1,7 +1,7 @@
 /* Public Google Calendar snapshot, refreshed automatically by GitHub Actions. */
 (() => {
  const zone='America/Edmonton';
- const calendarUrl='https://calendar.google.com/calendar/embed?src=046963d83f8556e8c4ef4fa33c72f92203bb73526b0cd63d9f7218aa33507e96%40group.calendar.google.com&ctz=America%2FEdmonton';
+ const calendarUrl='https://calendar.google.com/calendar/embed?src=c_0189f173417acc31373d77ace1604040364cb4f7368513314d6154544244b7af%40group.calendar.google.com&ctz=America%2FEdmonton';
  let feed=null,state='loading';
  const text=(en,fr)=>lang==='fr'?fr:en;
  const key=date=>date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
@@ -69,3 +69,4 @@
  }
  renderCalendar();load();
 })();
+
