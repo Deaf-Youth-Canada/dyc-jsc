@@ -105,8 +105,25 @@ nav a[aria-current="page"]{color:var(--red);text-decoration:underline;text-under
 #calendar-sync-status{font-size:.9rem;padding:12px;border-left:3px solid var(--red);background:white}
 .calendar-day:focus-visible,.event-details:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
 
-/* Parent organization and program details */
-.footer-identity{min-width:0;max-width:850px}
-.site-footer .footer-parent{margin:18px 0 8px;font-size:.875rem;font-weight:600;line-height:1.7;color:var(--navy)}
-.site-footer .footer-address{font-style:normal;font-size:.875rem;line-height:1.7;color:var(--muted);margin:0 0 16px}
-.footer-main>.social-links{flex-shrink:0}
+/* Balanced organization footer */
+.site-footer{padding-top:36px}
+.footer-main{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px 32px}
+.footer-identity{display:contents}
+.footer-identity>p:first-child{grid-column:1;grid-row:1;margin:0;align-self:center}
+.footer-main>.social-links{grid-column:2;grid-row:1;align-self:center}
+.footer-organization{grid-column:1 / -1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px 64px}
+.site-footer .footer-parent{grid-column:1;grid-row:1;margin:0;max-width:480px;font-size:.875rem;font-weight:600;line-height:1.6;color:var(--navy)}
+.site-footer .footer-parent .cad-link{text-decoration:none}
+.site-footer .footer-parent .cad-link:hover{text-decoration:underline}
+.site-footer .footer-address{grid-column:1;grid-row:2;font-style:normal;font-size:.875rem;line-height:1.7;color:var(--muted);margin:0}
+.site-footer .charitable-registration{grid-column:2;grid-row:1 / span 2;align-self:start;max-width:480px;margin:0;line-height:1.7}
+.site-footer .charitable-registration>span:first-child{display:block;color:var(--navy);font-weight:600;margin-bottom:12px}
+.site-footer .charitable-registration>br{display:none}
+@media(max-width:760px){
+ .footer-main{grid-template-columns:minmax(0,1fr);gap:24px}
+ .footer-main>.social-links{grid-column:1;grid-row:3}
+ .footer-organization{grid-template-columns:minmax(0,1fr);gap:8px}
+ .site-footer .charitable-registration{grid-column:1;grid-row:3;margin-top:16px;max-width:none}
+ .site-footer .footer-parent{max-width:none}
+ .site-footer .charitable-registration>span:first-child{margin-bottom:8px}
+}
