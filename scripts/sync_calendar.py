@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 from icalendar import Calendar
 import recurring_ical_events
 
-FEED = 'https://calendar.google.com/calendar/ical/046963d83f8556e8c4ef4fa33c72f92203bb73526b0cd63d9f7218aa33507e96%40group.calendar.google.com/public/basic.ics'
+FEED = 'https://calendar.google.com/calendar/ical/c_0189f173417acc31373d77ace1604040364cb4f7368513314d6154544244b7af%40group.calendar.google.com/public/basic.ics'
 ZONE = ZoneInfo('America/Edmonton')
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -88,3 +88,4 @@ def sync():
 
 if __name__ == '__main__':
     sync()
+
