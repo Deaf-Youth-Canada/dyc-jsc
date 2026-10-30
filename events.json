@@ -3,17 +3,6 @@
   "timeZone": "America/Edmonton",
   "windowStart": "2025-10-28",
   "windowEnd": "2028-10-29",
-  "checkedAt": "2026-10-29T06:26:14.408405+00:00",
-  "events": [
-    {
-      "title": "test",
-      "start": "2026-10-12T19:30:00-06:00",
-      "end": "2026-10-12T20:30:00-06:00",
-      "allDay": false,
-      "startDay": "2026-10-12",
-      "endDay": "2026-10-12",
-      "location": "",
-      "description": ""
-    }
-  ]
+  "checkedAt": "2026-10-30T02:21:35.690726+00:00",
+  "events": []
 }
