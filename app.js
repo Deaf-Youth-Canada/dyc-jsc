@@ -102,3 +102,48 @@ if (contactForm && /^https?:$/.test(window.location.protocol)) {
     document.querySelectorAll('.motion-enter').forEach(element => element.classList.remove('motion-enter'));
   });
 })();
+
+
+// Animate intentional interactions only; retain native controls and focus.
+(() => {
+  const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const active = new Set();
+  function track(animation) {
+    active.add(animation);
+    animation.finished.then(() => active.delete(animation), () => active.delete(animation));
+    return animation;
+  }
+  preference.addEventListener('change', event => {
+    if (event.matches) [...active].forEach(animation => animation.finish());
+  });
+  let calendarAnimation;
+  const calendar = document.querySelector('.calendar');
+  calendar?.addEventListener('click', event => {
+    if (preference.matches || !calendar.animate) return;
+    const month = event.target.closest('#previous-month, #next-month, #today-month');
+    const day = event.target.closest('.calendar-day');
+    if (!month && !day) return;
+    calendarAnimation?.cancel();
+    const target = document.querySelector(month ? '.calendar-table' : '#calendar-selection');
+    if (target) calendarAnimation = track(target.animate([{opacity:.4},{opacity:1}], {duration:180,easing:'ease-out'}));
+  });
+  document.querySelectorAll('details.board-term, details.resource-region').forEach(details => {
+    const summary = details.querySelector('summary');
+    let animation = null;
+    let targetOpen = details.open;
+    summary.addEventListener('click', event => {
+      if (preference.matches || !details.animate || event.defaultPrevented) return;
+      event.preventDefault();
+      const start = details.getBoundingClientRect().height;
+      const next = animation ? !targetOpen : !details.open;
+      if (animation) { animation.onfinish = null; animation.cancel(); }
+      targetOpen = next;
+      // Measure the exact destination including borders, without fixed heights.
+      details.open = next;
+      const end = details.getBoundingClientRect().height;
+      details.open = true;
+      animation = track(details.animate([{height:start+'px'},{height:end+'px'}], {duration:220,easing:'ease-out'}));
+      animation.onfinish = () => { details.open = next; animation = null; };
+    });
+  });
+})();

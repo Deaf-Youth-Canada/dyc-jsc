@@ -149,3 +149,14 @@ nav a[aria-current="page"]{color:var(--red);text-decoration:underline;text-under
  .button:hover,.memory-photo:hover img,.connection-list a:hover,.explore-card:hover,.board-card:hover{transform:none}
 }
 @media print{.motion-enter{animation:none!important;opacity:1!important;transform:none!important}}
+
+
+/* Interaction motion: photo viewer, calendar and native disclosures. */
+@keyframes dyc-viewer-in{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes dyc-backdrop-in{from{background:rgba(0,0,0,0)}to{background:rgba(0,0,0,.85)}}
+@keyframes dyc-day-select{from{background-color:transparent}to{background-color:#e7edf6}}
+@media(prefers-reduced-motion:no-preference){
+ #photo-viewer[open]{animation:dyc-viewer-in 200ms ease-out}
+ #photo-viewer[open]::backdrop{animation:dyc-backdrop-in 200ms ease-out}
+ .calendar-day[aria-pressed="true"]{animation:dyc-day-select 180ms ease-out}
+}
