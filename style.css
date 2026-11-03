@@ -129,3 +129,23 @@ nav a[aria-current="page"]{color:var(--red);text-decoration:underline;text-under
  .site-footer .charitable-registration>span:first-child{margin-bottom:8px}
 }
 
+
+
+/* Short, optional motion; content remains visible without JavaScript. */
+@keyframes dyc-dropdown-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes dyc-section-in{from{opacity:.25;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:no-preference){
+ .about-submenu:not([hidden]){animation:dyc-dropdown-in 160ms ease-out}
+ .motion-enter{animation:dyc-section-in 420ms ease-out}
+ .explore-card,.board-card,.connection-list a{transition:transform 180ms ease-out,box-shadow 180ms ease-out,border-color 180ms ease-out}
+ @media(hover:hover) and (pointer:fine){
+  .explore-card:hover,.board-card:hover,.connection-list a:hover{transform:translateY(-3px);box-shadow:0 8px 20px #14203918}
+ }
+ .explore-card:focus-visible,.connection-list a:focus-visible{box-shadow:0 8px 20px #14203918}
+}
+.motion-enter:focus-within{animation:none}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+ .button:hover,.memory-photo:hover img,.connection-list a:hover,.explore-card:hover,.board-card:hover{transform:none}
+}
+@media print{.motion-enter{animation:none!important;opacity:1!important;transform:none!important}}

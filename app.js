@@ -74,3 +74,31 @@ if (contactForm && /^https?:$/.test(window.location.protocol)) {
   contactForm.appendChild(nextPage);
 }
 
+
+
+// Reveal each eligible content block once, without ever hiding unread content.
+(() => {
+  if (!('IntersectionObserver' in window)) return;
+  const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (motionPreference.matches) return;
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      if (!motionPreference.matches && !entry.target.contains(document.activeElement)) {
+        entry.target.classList.add('motion-enter');
+      }
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -24px 0px' });
+  document.querySelectorAll('.section-heading, .home-about > div, .who-overview, .who-history, .who-mission, .volunteer-section, .explore-card, .board-card, .directory-heading').forEach(element => {
+    // Leave the initial viewport and direct anchor destinations immediately readable.
+    if (element.getBoundingClientRect().top >= window.innerHeight && !element.closest('.policy-page')) {
+      observer.observe(element);
+    }
+  });
+  motionPreference.addEventListener('change', event => {
+    if (!event.matches) return;
+    observer.disconnect();
+    document.querySelectorAll('.motion-enter').forEach(element => element.classList.remove('motion-enter'));
+  });
+})();
