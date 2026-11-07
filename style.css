@@ -160,3 +160,7 @@ nav a[aria-current="page"]{color:var(--red);text-decoration:underline;text-under
  #photo-viewer[open]::backdrop{animation:dyc-backdrop-in 200ms ease-out}
  .calendar-day[aria-pressed="true"]{animation:dyc-day-select 180ms ease-out}
 }
+
+
+@media(prefers-reduced-motion:reduce){.hero-image>img{transform:none!important}}
+@media print{.hero-image>img{transform:none!important}}

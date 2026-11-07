@@ -76,33 +76,68 @@ if (contactForm && /^https?:$/.test(window.location.protocol)) {
 
 
 
-// Reveal each eligible content block once, without ever hiding unread content.
+// Camp-inspired entrances: a paced opening, then one-time scroll reveals.
 (() => {
-  if (!('IntersectionObserver' in window)) return;
-  const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (motionPreference.matches) return;
+  if (!('IntersectionObserver' in window) || !Element.prototype.animate) return;
+  const preference = matchMedia('(prefers-reduced-motion: reduce)');
+  if (preference.matches) return;
+  const active = new Map();
+  const seen = new WeakSet();
+  function reveal(element, delay = 0) {
+    if (seen.has(element)) return;
+    seen.add(element);
+    if (preference.matches || element.contains(document.activeElement)) return;
+    const photo = element.matches('.hero-image, .camp-grid > img');
+    const from = photo ? 'scale(.97)' : 'translateY(32px)';
+    const animation = element.animate([
+      {opacity:0, transform:from}, {opacity:1, transform:'none'}
+    ], {duration:photo ? 900 : 720, delay, easing:'cubic-bezier(.22,1,.36,1)', fill:'backwards'});
+    active.set(element, animation);
+    animation.finished.then(() => active.delete(element), () => active.delete(element));
+  }
   const observer = new IntersectionObserver(entries => {
+    let order = 0;
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
-      if (!motionPreference.matches && !entry.target.contains(document.activeElement)) {
-        entry.target.classList.add('motion-enter');
-      }
+      reveal(entry.target, Math.min(order++ * 90, 270));
       observer.unobserve(entry.target);
     });
-  }, { threshold: 0, rootMargin: '0px 0px -24px 0px' });
-  document.querySelectorAll('.section-heading, .home-about > div, .who-overview, .who-history, .who-mission, .volunteer-section, .explore-card, .board-card, .directory-heading').forEach(element => {
-    // Leave the initial viewport and direct anchor destinations immediately readable.
-    if (element.getBoundingClientRect().top >= window.innerHeight && !element.closest('.policy-page')) {
-      observer.observe(element);
-    }
+  }, {rootMargin:'0px 0px -30px 0px', threshold:0});
+  const targets = document.querySelectorAll('.hero-copy > *, .hero-image, .section-heading, .home-about > div, .who-overview, .who-history, .who-mission, .volunteer-section, .explore-card, .board-card, .directory-heading, .camp-grid > img');
+  targets.forEach(element => {
+    // Preserve direct anchor navigation and long-form policy reading.
+    if (!element.closest('.policy-page') && (!location.hash || element.getBoundingClientRect().top >= innerHeight)) observer.observe(element);
   });
-  motionPreference.addEventListener('change', event => {
+  document.addEventListener('focusin', event => {
+    active.forEach((animation, element) => { if (element.contains(event.target)) animation.finish(); });
+  });
+  preference.addEventListener('change', event => {
     if (!event.matches) return;
     observer.disconnect();
-    document.querySelectorAll('.motion-enter').forEach(element => element.classList.remove('motion-enter'));
+    active.forEach(animation => animation.finish());
   });
 })();
 
+// Bounded photo depth on larger screens; the page keeps its normal scrolling.
+(() => {
+  const frame = document.querySelector('.hero-image');
+  const photo = frame?.querySelector('img');
+  if (!photo) return;
+  const allowed = matchMedia('(min-width: 900px) and (prefers-reduced-motion: no-preference)');
+  let pending = false;
+  function update() {
+    pending = false;
+    if (!allowed.matches) { photo.style.removeProperty('transform'); return; }
+    const rect = frame.getBoundingClientRect();
+    const shift = Math.max(-18, Math.min(18, (innerHeight / 2 - rect.top - rect.height / 2) * .055));
+    photo.style.transform = 'translateY(' + shift.toFixed(2) + 'px) scale(1.08)';
+  }
+  function schedule() { if (!pending) { pending = true; requestAnimationFrame(update); } }
+  addEventListener('scroll', schedule, {passive:true});
+  addEventListener('resize', schedule);
+  allowed.addEventListener('change', update);
+  update();
+})();
 
 // Animate intentional interactions only; retain native controls and focus.
 (() => {
@@ -147,3 +182,4 @@ if (contactForm && /^https?:$/.test(window.location.protocol)) {
     });
   });
 })();
+
