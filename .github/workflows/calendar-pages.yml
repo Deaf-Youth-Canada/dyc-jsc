@@ -61,6 +61,7 @@ jobs:
           cp *.html *.css *.js *.png events.json CNAME _site/
           cp -R assets _site/
           touch _site/.nojekyll
+          python scripts/optimize_images.py _site
       - uses: actions/upload-pages-artifact@v3
         if: steps.changes.outputs.publish == 'true'
         with:
