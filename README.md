@@ -22,10 +22,13 @@ Messages still go through FormSubmit to info@dycjsc.ca. JavaScript sets the than
 - `terms.html`, `privacy.html`: bilingual policy pages.
 - `app.js`: language switching, calendar, dropdowns, gallery, bylaws reader, and contact redirect.
 - `style.css`: shared responsive styles.
+- `scripts/optimize_images.py`: runs during each deploy and shrinks oversized photos in the published copy (the originals in `assets/` are kept). New photos can be uploaded at full size.
+- `404.html`: branded "page not found" page. `community.html` redirects old links to `cdylc.html`.
+
+Each inner page opens with a `page-banner`. To change a banner photo, edit the `--banner-image` value at the top of that page's `<main>`; `--banner-position` (optional) controls which part of the photo stays visible.
 
 Update both `data-en` and `data-fr` when changing translated copy. `mission.html` retains a legacy redirect; `resources.html` contains the external resource directory. The original Sites address remains live until a separate change is requested.
 
 After publishing, check desktop and mobile navigation, English/French switching, all images, the bylaws reader, and contact delivery.
 
 Photos, logos, and content retain their existing rights; this repository does not grant an open-source license to them.
-
