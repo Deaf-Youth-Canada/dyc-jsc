@@ -103,7 +103,7 @@ if (contactForm && /^https?:$/.test(window.location.protocol)) {
       observer.unobserve(entry.target);
     });
   }, {rootMargin:'0px 0px -30px 0px', threshold:0});
-  const targets = document.querySelectorAll('.hero-copy > *, .hero-image, .section-heading, .home-about > div, .who-overview, .who-history, .who-mission, .volunteer-section, .explore-card, .board-card, .directory-heading, .camp-grid > img');
+  const targets = document.querySelectorAll('.hero-copy > *, .hero-image, .page-banner-inner > :not(.breadcrumb), .section-heading, .home-about > div, .who-overview, .who-history, .who-mission, .volunteer-section, .explore-card, .board-card, .directory-heading, .camp-grid > img');
   targets.forEach(element => {
     // Preserve direct anchor navigation and long-form policy reading.
     if (!element.closest('.policy-page') && (!location.hash || element.getBoundingClientRect().top >= innerHeight)) observer.observe(element);
