@@ -44,10 +44,19 @@ document.querySelector('#previous-month')?.addEventListener('click',()=>moveMont
 document.querySelector('#calendar-days')?.addEventListener('click',event=>{const button=event.target.closest('button[data-day]');if(!button)return;const day=Number(button.dataset.day);selectedCalendarDate=new Date(calendarYear,calendarMonth,day);renderCalendar();document.querySelector('#calendar-days button[data-day="'+day+'"]').focus({preventScroll:true});});
 setLanguage(lang);
 
-const photoLinks=Array.from(document.querySelectorAll('[data-photo-index]'));
+let photoLinks=Array.from(document.querySelectorAll('[data-photo-index]'));
 const photoViewer=document.querySelector('#photo-viewer');let activePhoto=0;let photoTrigger=null;
 function showPhoto(index){activePhoto=(index+photoLinks.length)%photoLinks.length;const link=photoLinks[activePhoto];const img=link.querySelector('img');document.querySelector('#full-photo').src=link.getAttribute('href');document.querySelector('#full-photo').alt=img.alt;document.querySelector('#original-photo').href=link.getAttribute('href');document.querySelector('#photo-counter').textContent=(lang==='fr'?'Photo ':'Photo ')+(activePhoto+1)+(lang==='fr'?' sur ':' of ')+photoLinks.length;}
-photoLinks.forEach((link,i)=>link.addEventListener('click',e=>{if(!photoViewer?.showModal)return;e.preventDefault();photoTrigger=link;showPhoto(i);photoViewer.showModal();document.body.style.overflow='hidden';document.querySelector('#close-photo').focus()}));
+function bindPhoto(link){link.addEventListener('click',e=>{if(!photoViewer?.showModal)return;e.preventDefault();photoTrigger=link;showPhoto(photoLinks.indexOf(link));photoViewer.showModal();document.body.style.overflow='hidden';document.querySelector('#close-photo').focus()})}
+photoLinks.forEach(bindPhoto);
+// Photos added to the shared Google Drive folder (see scripts/sync_memories.py) appear after the archive photos.
+const memoriesGrid=document.querySelector('.memories-grid');
+if(memoriesGrid){fetch('memories.json',{cache:'no-cache'}).then(r=>r.ok?r.json():{photos:[]}).then(data=>{const photos=(data&&Array.isArray(data.photos))?data.photos.filter(p=>typeof p.src==='string'&&/^assets\/drive-memories\/[A-Za-z0-9_-]+\.jpg$/.test(p.src)):[];if(!photos.length)return;
+ photos.forEach(p=>{const a=document.createElement('a');a.className='memory-photo';a.href=p.src;a.setAttribute('data-photo-index','');const img=document.createElement('img');img.src=p.src;img.loading='lazy';img.decoding='async';if(p.width&&p.height){img.width=p.width;img.height=p.height}a.append(img,document.createElement('span'));memoriesGrid.append(a);bindPhoto(a)});
+ photoLinks=Array.from(memoriesGrid.querySelectorAll('[data-photo-index]'));const total=photoLinks.length;
+ photoLinks.forEach((link,i)=>{link.dataset.photoIndex=i;link.querySelector('span').textContent=String(i+1).padStart(2,'0');const img=link.querySelector('img');if(!img.dataset.altEn||/archive photo \d+ of \d+/.test(img.dataset.altEn)){img.dataset.altEn=`DYC / JSC archive photo ${i+1} of ${total}`;img.dataset.altFr=`Photo ${i+1} sur ${total} des archives de DYC / JSC`}img.alt=lang==='fr'?img.dataset.altFr:img.dataset.altEn});
+ document.querySelectorAll('.page-banner .page-lead').forEach(el=>{['en','fr'].forEach(l=>{if(el.dataset[l])el.dataset[l]=el.dataset[l].replace(/\d+/,total)});el.innerHTML=el.dataset[lang]||el.innerHTML});
+}).catch(()=>{})}
 document.querySelector('#close-photo')?.addEventListener('click',()=>photoViewer.close());document.querySelector('#previous-photo')?.addEventListener('click',()=>showPhoto(activePhoto-1));document.querySelector('#next-photo')?.addEventListener('click',()=>showPhoto(activePhoto+1));
 photoViewer?.addEventListener('close',()=>{document.body.style.overflow='';photoTrigger?.focus()});photoViewer?.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'){e.preventDefault();showPhoto(activePhoto-1)}if(e.key==='ArrowRight'){e.preventDefault();showPhoto(activePhoto+1)}});
 
@@ -182,4 +191,3 @@ if (contactForm && /^https?:$/.test(window.location.protocol)) {
     });
   });
 })();
-
