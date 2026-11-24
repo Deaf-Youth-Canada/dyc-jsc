@@ -6,6 +6,7 @@ images without anyone having to resize photos by hand.
 
 Usage: python scripts/optimize_images.py _site
 """
+import json
 import sys
 from pathlib import Path
 
@@ -52,8 +53,49 @@ def optimize_png(path, max_width):
     return save_if_smaller(path, image, format='PNG', optimize=True)
 
 
+def make_app_icons(root):
+    """Home-screen icons and web app manifest, made from the full-size favicon logo."""
+    source_path = root / 'favicon.png'
+    if not source_path.exists():
+        return
+    with Image.open(source_path) as source:
+        logo = source.convert('RGBA')
+    logo = logo.crop(logo.getbbox())
+
+    def icon(size, padding):
+        canvas = Image.new('RGBA', (size, size), (255, 255, 255, 255))
+        inner = int(size * (1 - 2 * padding))
+        mark = logo.copy()
+        mark.thumbnail((inner, inner), Image.LANCZOS)
+        canvas.alpha_composite(mark, ((size - mark.width) // 2, (size - mark.height) // 2))
+        return canvas.convert('RGB')
+
+    icons = root / 'assets' / 'icons'
+    icons.mkdir(parents=True, exist_ok=True)
+    icon(180, .14).save(root / 'apple-touch-icon.png', optimize=True)  # found automatically by iPhones and iPads
+    icon(192, .14).save(icons / 'icon-192.png', optimize=True)
+    icon(512, .14).save(icons / 'icon-512.png', optimize=True)
+    icon(512, .22).save(icons / 'icon-maskable-512.png', optimize=True)  # extra room for Android's round masks
+    manifest = {
+        'name': 'Deaf Youth Canada / Jeunes Sourds du Canada',
+        'short_name': 'DYC / JSC',
+        'start_url': '/',
+        'scope': '/',
+        'display': 'standalone',
+        'background_color': '#ffffff',
+        'theme_color': '#142039',
+        'icons': [
+            {'src': '/assets/icons/icon-192.png', 'sizes': '192x192', 'type': 'image/png'},
+            {'src': '/assets/icons/icon-512.png', 'sizes': '512x512', 'type': 'image/png'},
+            {'src': '/assets/icons/icon-maskable-512.png', 'sizes': '512x512', 'type': 'image/png', 'purpose': 'maskable'},
+        ],
+    }
+    (root / 'site.webmanifest').write_text(json.dumps(manifest, indent=2) + '\n')
+
+
 def main(site):
     root = Path(site)
+    make_app_icons(root)  # before the favicon below is shrunk
     before = after = 0
     targets = []
     for path in sorted((root / 'assets').rglob('*')):
