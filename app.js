@@ -191,3 +191,6 @@ if (contactForm && /^https?:$/.test(window.location.protocol)) {
     });
   });
 })();
+
+// Home-screen icon and app name (files are generated during the build by scripts/optimize_images.py).
+(()=>{const head=document.head;const add=(tag,attrs)=>{if(head.querySelector(tag+'['+Object.keys(attrs)[0]+'="'+Object.values(attrs)[0]+'"]'))return;const el=document.createElement(tag);Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v));head.append(el)};add('link',{rel:'manifest',href:'/site.webmanifest'});add('link',{rel:'apple-touch-icon',href:'/apple-touch-icon.png'});add('meta',{name:'theme-color',content:'#142039'});add('meta',{name:'apple-mobile-web-app-title',content:'DYC / JSC'})})();
