@@ -48,3 +48,14 @@ body{font-size:1rem}
 .page-banner.align-who .page-banner-inner{max-width:75rem}.page-banner.align-policy .page-banner-inner{max-width:62.5rem}
 @media(min-width:761px){.section.who-page,.section.policy-page{padding-left:64px;padding-right:64px}}
 @media(max-width:760px){.page-banner.align-who .page-banner-inner,.page-banner.align-policy .page-banner-inner{padding:0}.section.who-page,.section.policy-page{padding-left:22px;padding-right:22px}}
+
+/* Event add-to-calendar and share actions. */
+.event-actions{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;margin-top:10px}
+.event-actions a,.event-actions button{padding:6px 0;border:0;background:none;font:inherit;font-size:.88rem;font-weight:650;color:var(--navy);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.event-actions a:hover,.event-actions button:hover{color:var(--red)}
+.event-actions a:focus-visible,.event-actions button:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
+.event-share-status{font-size:.85rem;color:var(--muted)}
+.upcoming-panel .event-actions a,.upcoming-panel .event-actions button{color:#fff}
+.upcoming-panel .event-actions a:hover,.upcoming-panel .event-actions button:hover{color:#ffadb0}
+.upcoming-panel .event-actions a:focus-visible,.upcoming-panel .event-actions button:focus-visible{outline-color:#fff}
+.upcoming-panel .event-share-status{color:#e0e6ef}
