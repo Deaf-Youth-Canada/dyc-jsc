@@ -34,6 +34,12 @@ jobs:
         id: sync
         continue-on-error: true
         run: python scripts/sync_calendar.py
+      - name: Refresh Memories photo list from Google Drive
+        id: memories
+        continue-on-error: true
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        run: python scripts/sync_memories.py list
       - name: Preserve snapshot and decide whether to publish
         id: changes
         env:
@@ -44,16 +50,23 @@ jobs:
             echo '::warning::Calendar refresh failed. Retaining the last successful public snapshot.'
             test -s events.json
           fi
-          if ! git diff --quiet -- events.json; then
+          if ! git diff --quiet -- events.json memories.json; then
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add events.json
-            git commit -m 'Refresh public calendar snapshot'
+            git add events.json memories.json
+            git commit -m 'Refresh public calendar and Memories photos'
             git push origin HEAD:main
             echo 'publish=true' >> "$GITHUB_OUTPUT"
           elif [ "$TRIGGER" != schedule ]; then
             echo 'publish=true' >> "$GITHUB_OUTPUT"
           fi
+      - name: Reuse downloaded Memories photos
+        if: steps.changes.outputs.publish == 'true'
+        uses: actions/cache@v4
+        with:
+          path: .memories-cache
+          key: memories-${{ hashFiles('memories.json') }}
+          restore-keys: memories-
       - name: Prepare static website
         if: steps.changes.outputs.publish == 'true'
         run: |
@@ -61,6 +74,7 @@ jobs:
           cp *.html *.css *.js *.png events.json CNAME _site/
           cp -R assets _site/
           touch _site/.nojekyll
+          python scripts/sync_memories.py download _site
           python scripts/optimize_images.py _site
       - uses: actions/upload-pages-artifact@v3
         if: steps.changes.outputs.publish == 'true'
